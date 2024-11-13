@@ -1,0 +1,58 @@
+---
+- name: Deploy PostgreSQL with Docker Compose
+  hosts: host1
+  become: true
+  vars:
+    directory: "~/Learning_Ansible/docker"
+  tasks:
+    - name: Ensure Docker is installed
+      apt:
+        name: docker
+        state: present
+      when: ansible_os_family == "Debian"
+
+    - name: Ensure Docker Compose is installed
+      apt:
+        name: docker-compose-v2
+        state: present
+      when: ansible_os_family == "Debian"
+
+    - name: Install Docker Python library
+      pip:
+        name: docker
+        state: present
+
+    - name: Install Docker-Compose Python library
+      pip:
+        name: docker-compose
+        state: present
+
+    - name: Give permission to docker.sock
+      command: sudo chmod 666 /var/run/docker.sock
+
+    - name: Copy Docker Compose file
+      copy:
+        src: "{{ directory }}/posgres-compose.yaml"
+        dest: /tmp/posgres-compose.yaml
+
+    - name: Copy Dockerfile
+      copy:
+        src: "{{ directory }}/posgres-dockerfile"
+        dest: /tmp/posgres-dockerfile
+
+    - name: Copy init.sql
+      copy:
+        src: "{{ directory }}/init.sql"
+        dest: /tmp/init.sql
+
+    - name: Run Docker Compose
+      community.docker.docker_compose_v2:
+        project_src: /tmp
+        files:
+          - /tmp/posgres-compose.yaml
+        state: present
+      register: docker_compose_output
+
+    - name: Display Docker Compose output
+      debug:
+        var: docker_compose_output

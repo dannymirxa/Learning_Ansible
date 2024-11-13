@@ -1,0 +1,5 @@
+[host1]
+192.168.0.22 ansible_user=danialmirxatarget1 ansible_password=password1 ansible_connection=ssh ansible_become_pass=danialmirxa1
+ 
+[host2]
+192.168.0.23 ansible_user=danialmirxatarget2 ansible_password=password2 ansible_connection=ssh ansible_become_pass=danialmirxa2

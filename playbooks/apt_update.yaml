@@ -1,0 +1,9 @@
+- name: Upgrade packages
+  hosts: "*"
+  tasks:
+    - name: Update packages if OS is Debian
+      become: true
+      apt:
+        update_cache: yes
+        upgrade: yes
+      when: ansible_os_family == "Debian"

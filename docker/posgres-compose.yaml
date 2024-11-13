@@ -1,0 +1,17 @@
+services:
+  postgres:
+    build:
+      context: .
+      dockerfile: posgres-dockerfile
+    environment:
+      - POSTGRES_USER=myuser
+      - POSTGRES_DB=Employees
+      - POSTGRES_PASSWORD=mypassword
+    ports:
+      - "5432:5432"
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    container_name: employee_db
+
+volumes:
+  db-data:

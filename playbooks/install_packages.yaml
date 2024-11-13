@@ -1,0 +1,24 @@
+- name: Install packages
+  hosts: host1
+  become: true
+  vars: 
+    packages:
+    - name: nginx
+      required: True
+    - name: htop
+      required: False
+    - name: docker
+      required: True
+    - name: docker-compose-v2
+      required: True
+    - name: python3
+      required: True
+    - name: python3-pip
+      required: True
+    
+  tasks:
+  - name: Install "{{ item.name }}" on host
+    apt:
+      name: "{{ item.name }}"
+      state: present
+    loop: "{{ packages }}"
